@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  nextjs-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: innovation-store-landing
+    restart: always
+    ports:
+      - "3322:3000"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - innovation-network
+    volumes:
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+networks:
+  innovation-network:
+    driver: bridge
